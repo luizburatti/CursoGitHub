@@ -104,5 +104,8 @@ git remote -v    -- lista todos meus repositorios
 
 git push origin master   Envia para o repositorio os dados.
 
-git pull - puxar os dados do repositorio 
+git pull origin master - puxar os dados do git hub 
+
+git clone  link do repositorio.   -- trago o repositorio baixado do git hub de qualquer repositorio online.
+
 
