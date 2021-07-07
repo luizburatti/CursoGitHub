@@ -67,4 +67,42 @@ Configuração do repositorio.
 git config --global  user.email"email@hotmail.com"
 git config --global  user.name Luiz  
 
+git add *  - puxa todos os arquivos do repossitorio.
+
+Git commit -m "comentario" -- Sobe nosso repositorio para o git.
+
+Git status - tras o status do nosso repositorio.
+
+
+$ mv Receita.html ./receitas/   -- Mover arquivos entre pastas.
+  
+git status - pastas untracked  pela movimentação de arquivos entre pastas.
+
+Então irremos corrigir o repossitorio, adicionando novamente nosso arquivo de baseando 
+no novo repositorio receitas/ 
+git add Receita.html  receitas/
+
+Git ADD - joga os arquivos para  Staged. 
+Git commit - pega todos os arquivos  da staged e gera um batch para serem enviados.
+
+Untracked, Unmodified, Modified e Staged.  4 Estagios de arquivo no git.
+
+Trabalhando com repositorio local.
+
+git config --list   -- Configuração  do seu git para o seu git hub email e etc.
+
+git config --global --unset user.email  Apaga as config.
+
+git config --global --unset user.name   Apaga as config.
+
+repositorio local para repositorio servidor (github).
+
+git remote add origin (repositorio) 
+git remote add origin https://github.com/luizburatti/CursoGitHub.git
+
+git remote -v    -- lista todos meus repositorios 
+
+git push origin master   Envia para o repositorio os dados.
+
+git pull - puxar os dados do repositorio 
 
