@@ -1,0 +1,70 @@
+
+Comandos Git e GitHub
+
+dir = lista todos os diretorios no windows.
+Ls = lista todos os diretorios no linux.
+
+CD = change director  comando para navegar nas pastas (linux e windows)  CD/ 
+CD ..  = volta para diretorio anterior.
+
+CLS - limpar terminal. 
+Clear - limpar terminal (linux). Ctrl + L atalho para limpar o console.
+
+Tab  =  Auto complete  (windows).
+
+mkdir NomeDaPasta = Criar diretorio (mesmo comando para windows e linux).
+
+echo - Printa o que foi escrevido. 
+EX:
+ Echo hello  = hello. 
+> - direcionador de fluxo.
+
+ Caso utilizar o  (echo hello > hello.txt) -- cria arquivo de texto pelo terminal.
+
+ del - comando para deletar repositorio.(deleta tudo que tem dentro do repositorio).
+
+ rmdir workspace(nome do diretorio)  /s /q  =  Deleta completamente o repositorio.
+ rm -rf  workspace(nome do diretorio) = Deleta completamente o repositorio.(linux).
+
+
+ sudo su -  solicita permição para instalar app no linux.
+git --version - Busca a versão da app escolhida.
+
+
+Fundamentos Git GitHub
+
+SHA1 -  Encriptçao de 40 digitos.(segurança do git gub).
+
+Echo "string" | openssl sha1 -- Incriptar mensagem.
+
+
+Blobs/Trees/commits  -  3 Tipos basicos responsavel por versionamento.
+
+echo 'conteudo' | git hash-object --stdin -- retorna sha1  utilizando o hash 
+
+fc31e91b26cf85a55e072476de7f263c89260eb1
+
+blob salva objetos  < no git 
+
+echo -e 'blob 9\0conteudo' | openssl sha1
+
+fc31e91b26cf85a55e072476de7f263c89260eb1
+
+Tree -  armazena os blobs 
+
+Commit > treee > Blobs   -- Junta toda estrutura dos meta dados.
+
+
+Primeiros comandos GIT. 
+
+Git init - iniciar o git dentro da pasta, para poder inicializar e 
+poder usar o gerenciamento de codigo pelo git.
+
+ls -a = mostra arquivos ocultos muito util para ver o arquivo do gitconfig.
+
+Configuração do repositorio.
+
+git config --global  user.email"email@hotmail.com"
+git config --global  user.name Luiz  
+
+
