@@ -108,4 +108,4 @@ git pull origin master - puxar os dados do git hub
 
 git clone  link do repositorio.   -- trago o repositorio baixado do git hub de qualquer repositorio online.
 
-
+ git submodule add PostGreSQL/digital_innovation_one  -- Salvar dados de outros repositorios no seu git hub 

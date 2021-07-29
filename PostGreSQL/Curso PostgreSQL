@@ -4,16 +4,21 @@ Valores brutos, fatos brutos, observações, documentações que são armazenada
 Informações : conjunto de dados que geram valores e geram sentido.
 
 
+O method trust do usuário do banco de dados no arquivo pg_hba.conf  -> retirar a senha 
 
 -- Senha do meu postgres = senha.
 
 
 postgresql.conf   - ao acessar a view consegue visualizar todas as configurações atuais do banco.
 
+Armazenar todas as configurações do servidor PostgreSQL que são compartilhadas com todos os bancos de dados do cluster.
+
+
 select * from  pg_settings;
 or  show [parametro]
 
 se encontra dentro  da pasta  data no windows.
+Dentro do diretório de dados do PostgreSQL, também conhecido como PGDATA
 
 configurações de conexão.
 
@@ -51,23 +56,23 @@ determinam ate onde pode entrar e de qual IP e etc.
 
 Cluster uma coleções de bancos de dados que utilizam  o mesmo banco de dados
 
+Schemas são:
+Um ou mais grupos de objetos (tabelas, funções, views, triggers, etc) dentro de bancos de dados.
+
 create role professores NOCREATEDB nocreaterole inherit nologin connection limit 10;
 alter role professores  password '123';
 --create role daniel login password '123';
 --drop role daniel;
 --create role  daniel login password '123' in role professores;
 --create role  daniel login password '123' in role professores;
-
-
-
-DML - data manipulation language 
-INSERT, update, delete, select 
-
-create table teste (nome varchar) ;
-
 grant all on table teste to professores;
 
-select * from teste; 
+INHERIT  -  Capacidade de herdar as permissões de outras roles.
+
+Para desassociar roles 
+
+REVOKE [role] FROM [role] 
+
 
 
 DDL  -  data difinition language 
@@ -146,6 +151,195 @@ foreign key (banco_numero,agencia_numero,conta_corrente_numero,conta_corrente_di
 );
 
 
+DML - data manipulation language 
+INSERT, update, delete, select 
+
+
+Idempotência - Evita trazer erros no banco de dados.
+ex  : IF NOT EXISTS, IF EXISTS 
+NOT EXISTS / EXISTS 
+
+ON CONFLICT 
+EX:
+
+-- Idempotência NO INSERT
+INSERT INTO AGENCIA (banco_numero ,numero, nome)  VALUES (341,1,'CENTRO DA CIDADE')
+ON CONFLITCT (banco_numero,numero) DO NOTHING;  
+
+
+Funções de agregações:
+MAX , MIN , AVG, HAVING, COUNT 
+
+select * from information_schema.columns  where table_name ='banco'; -- informações das colunas das tabelas evitar o * 
+
+select avg (valor) from cliente_transacoes;
+
+select count (numero), email 
+from cliente
+where email ilike '%gmail.com'
+group by email;
+
+
+select count (id), tipo_transacao_id
+from cliente_transacoes
+group by tipo_transacao_id
+having count (id) > 150;
+
+
+
+ -- FULL JOIN   tras todas as relaçoes possiveis relacionadas as tabelas 
+ e os dados sem relação.
+
+ cross join.
+ Todos os dados de uma tabela serao cruzados com todos os dados da tabela 
+ referenciada no cross join criando uma matriz. 
+
+ Ex: 
+ select t1.l  ,t2.o from  tabela1 t1 
+ cross join  tabale2 t2; 
+
+
+ CTE  - Forma auxiliar de organizar statements cria tabelas temporarias
+ para auxiliar query complexas e grandes.
+
+
+ with tbl_tmp_banco as (
+select numero,nome from banco
+)
+select numero,nome 
+from tbl_tmp_banco;
+
+
+with  params as (
+select 213 as banco_numero
+	
+), tbl_temp_banco as (
+select numero,nome
+	from banco 
+join params  on params.banco_numero = banco.numero
+)
+select numero, nome from tbl_temp_banco;
+
+ -- outra forma com join 
+ 
+ select banco.numero, banco.nome
+ from banco
+ join (
+ select 213 as banco_numero
+ ) params on params.banco_numero = banco.numero;
+
+
+
+---views
+
+select  numero, nome, ativo from banco;
+
+
+create or replace view  vw_bancos as (
+
+select  numero, nome, ativo from banco
+
+
+);
+
+select  * from  vw_bancos;
+
+drop view vw_bancos_2;
+
+create or replace view vw_bancos_2 (banco_numero,banco_nome, banco_ativo) as( 
+
+select  numero, nome , ativo   
+	from banco 
+
+);
+
+select  * from  vw_bancos_2;
+
+insert into vw_bancos_2 (banco_numero,banco_nome, banco_ativo)
+values (52, 'Banco Boa Ideia', true);
+
+-- View simples sem joins, se pode aplicar update, delete, insert.
+select banco_numero, banco_nome, banco_ativo from vw_bancos_2 where banco_numero=52;
+
+select numero, nome, ativo from banco where numero=52; 
+
+update vw_bancos_2  set banco_ativo = false  where banco_numero =52 ;
+
+delete from  vw_bancos_2  where banco_numero = 52; 
+
+
+create or replace temporary view  vw_agencia  as   -- view temporaria so consegue acessar ela na mesma sessão.
+(
+select  nome from agencia 
+
+);
+
+select nome  from vw_agencia;
+
+
+create or replace view  vw_bancos_ativos as 
+(
+select numero, nome, ativo
+	from banco 
+	where ativo is true
+	
+) with local check option;  --- Força a view manter as regras do Selecet, por ex  so vou poder inserir dados 
+-- se forem bancos ativos.
+
+
+create or replace view  vw_bancos_ativos_com_a as  
+( -- Consigo criar view se basendo em um select de outra view herdando suas regras 
+-- Por exemplo so vou poder inserir dados nesta se forem bancos ativos (vw_bancos_ativos) e começarem com a letra A.
+select numero, nome, ativo
+	from vw_bancos_ativos 
+	where nome ilike 'a%'
+	
+) with local check option ;  -- with cascade check option ;  Valida as regras das duas tabelas mesmo sem dados. 
+
+
+
+
+
+
+create table if not exists funcionarios 
+(
+id serial, 
+	nome varchar (50),
+		gerente integer,
+			primary key (id),
+				foreign key (gerente)  references funcionarios (id) 
+) ;
+
+insert into funcionarios  (nome,gerente) values ('Ancelmo',null);
+insert into funcionarios  (nome,gerente) values ('Beatriz',1);
+insert into funcionarios  (nome,gerente) values ('Magno',1);
+insert into funcionarios  (nome,gerente) values ('Cremilda',2);
+insert into funcionarios  (nome,gerente) values ('Wagner',4);
+
+select * from funcionarios;
+
+select  id, nome, gerente  from funcionarios where gerente is null 
+union all
+select  id, nome, gerente  from funcionarios where id = 999; -- apenas exemplicar 
+
+-- Views recursivas. 
+
+create or replace  recursive view  vw_func (id,gerente,funcionario) 
+as (
+	select id, gerente, nome 
+		from funcionarios  
+			where gerente is null 
+	
+			Union all  -- Vai fazer a View entrar em LOOP e vai trazer todos os dados encontrados nos dois selects 
+	
+	select  funcionarios.id, if funcionarios.gerente = 
+	
+	,funcionarios.nome
+		from funcionarios 
+	 join vw_func on vw_func.id = funcionarios.gerente    -- Faço join na vw de criação para gerar o loop, assim deve trazer o gerente nulo e 
+	-- os gerentes relacionados a cada funcionario  ID  do gerente  =  gerente propriamente dito.
+	
+);
 
 
 

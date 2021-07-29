@@ -1,0 +1,63 @@
+-- JAVA anotações.
+
+
+O que significa ter uma Tipagem Forte e Estática?
+
+Tipagem forte pois não pode ter o tipo alterado e Estático pois o tipo é verificado em tempo de compilação.
+
+
+Quais dos tipos abaixo são primitivos?
+
+int, long, double e float.
+
+
+metodos publicos:
+Pode ser acessada de qualquer lugar por qualquer entidade.
+
+Private: 
+
+So pode ser aplicado a atributos e metodos de classe, 
+so pode ser usado dentro da classe.
+
+protected : 
+
+acessivel dentro do mesmo pacote e por herança.
+
+Default :
+
+so pode ser acessada dentro do pacote.
+
+Abstract  :
+
+Não pode ser usado em variavel apenas em classes e metodos.
+Não poder virar objeto  
+
+Static : 
+
+Usado para criação de variaveis, quando instaciar ela em uma classe,
+sendo estatico ela alterará o valor para todas as instacias.
+
+Final : 
+
+Não deixa reencrever variavel.
+Bom para utilizar em metodos, não deixa altearar os valores. 
+
+Interfaces : 
+
+Quais das afirmações é verdadeira em relação a Interfaces?
+
+Funcionam como contratos de métodos abstratos.
+
+metodos abstratos, metodos Default  e herança multipla. 
+
+Metodos default não quebra os contratos de interface.
+
+criar varias abstrações. 
+
+Enum : 
+
+Dicionario de dados imutável. 
+
+Enum pode ter atributos nas suas variaveis.
+
+andrelugomes/digital-innovation-one 
